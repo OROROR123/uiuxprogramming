@@ -5,40 +5,82 @@
   <title>FocusDay</title>
 </head>
 <body>
+  
+  <!--
+  사용자: 오늘 해야 할 일을 정리하고 관리하고 싶은 사용자
+  목적: 하루의 할 일과 일정을 간단하게 확인하고 관리하기 위해 사용
+  핵심 행동: 할 일 확인, 일정 관리, 완료 여부 확인, 알림 신청
+  정보 순서: 서비스 소개 → 주요 기능 → 사용 방법 → 알림 받기
+  -->
+
   <header>  
     <h1>FocusDay</h1>
     <p>오늘 해야 할 일을 간단하게 정리하고 관리하는 서비스입니다</p>
+
+    <nav aria-label="메인메뉴">
+      <a href="#about">서비스 소개</a>
+      <a href="#features">주요 기능</a>
+      <a href="#steps">사용 방법</a>
+      <a href="#subscribe">알림 받기</a>
+    </nav>
+
+    
   </header>
 
-  <h2>오늘의 할 일</h2>
-  <h3>할 일 목록</h3>
+  <main>
+    <section id ="about">
 
-  <img src="assets/images/asdf.png" alt="할 일 이미지">
+      <h2>서비스 소개</h2>
+      <h3>하루의 할 일을 간편하게 관리하세요</h3>
+    
+      <img src="assets/images/qwer.png" alt="할 일 이미지">
+      <p>FocusDay는 오늘 해야 할 일을 한눈에 정리하고 관리할 수 있는 서비스입니다.</p>
+      <p>해야 할 일을 작성하고 완료한 일을 확인하며 하루의 일정을 효율적으로 관리할 수 있습니다.</p>
+    </section>
+    
+    <section id ="features">
+      <h2>주요 기능</h2>
+      <ul>
+        <li>
+          <h3>할 일 작성</h3>
+          <p>오늘 해야 할 일을 간단하게 작성할 수 있습니다.</p>
+        </li>
+        <li>
+          <h3>일정 관리</h3>
+          <p>작성한 할 일을 확인하며 하루의 일정을 관리할 수 있습니다.</p>
+        </li>
+        <li>
+          <h3>완료 확인</h3>
+          <p>완료한 일을 확인하며 진행 상황을 관리할 수 있습니다.</p>
+        </li>
+      </ul>
+    </section>
+    
+    <section id ="steps">
+      <h2>사용 방법</h2>
+      <ol>
+        <li>오늘 해야 할 일을 작성합니다.</li>
+        <li>작성한 할 일을 확인하며 일정을 진행합니다.</li>
+        <li>완료한 일을 확인하여 하루의 할 일을 관리합니다.</li>
+      </ol>
+
+    </section>
+
+    <section id="subscribe">
+      <h2>알림 받기</h2>
+        <form>
+          <label for="email">이메일</label>
+          <input type="email" id="email" name="email">
+          <button type="submit">알림 받기</button>
+        </form>
+    </section>
+      
+  </main>
+
+  <footer>
+    <small>FocusDay</small>
+  </footer>
 
 
-  <h2>오늘의 일정</h2>
-  <ul>
-    <li>
-      <h3>회의</h3>
-      <p>오늘 오후 2시에 팀 회의가 있습니다.</p>
-    </li>
-    <li>
-      <h3>점심 약속</h3>
-      <p>오늘 점심에 친구와 약속이 있습니다.</p>
-    </li>
-    <li>
-      <h3>운동</h3>
-      <p>오늘은健身房에 가서 운동을 합니다.</p>
-    </li>
-  </ul>
-
-  <h2>오늘의 목표</h2>
-  <ol>
-    <li>오늘의 목표 1</li>
-    <li>오늘의 목표 2</li>
-    <li>오늘의 목표 3</li>
-  </ol>
-
-
-</body>
+  </body>
 </html>
