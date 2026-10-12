@@ -200,7 +200,7 @@ button:active {
   }
 
   button {
-    min-width: 48px;
+    min-height : 48px;
   }
 
 }
