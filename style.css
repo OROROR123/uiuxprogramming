@@ -204,3 +204,22 @@ button:active {
   }
 
 }
+
+#subscribe-message {
+  margin-top: 16px;
+  color: #55636C;
+}
+
+#subscribe-message.is-success {
+  color: #2F7D76;
+  background-color: #EAF3F1;
+  pading: 12px;
+  boader-radius: 10px;
+  font-weight: 700;
+} 
+
+#subscribeButton:disabled {
+  color: #BFCBC8;
+  bakground-color: #EAF3F1;
+  cursor: not-allowed;
+}
