@@ -45,20 +45,68 @@
     
     <section id ="features">
       <h2>주요 기능</h2>
-      <ul class="features-list">
-        <li class="feature-card">
-          <h3>할 일 정보 확인</h3>
-          <p>하루의 할 일을 정리하는 방법에 대한 내용을 확인할 수 있습니다.</p>
-        </li>
-        <li class="feature-card">
-          <h3>일정 정보 확인</h3>
-          <p>하루의 일정을 효율적으로 계획하는 방법을 확인할 수 있습니다.</p>
-        </li>
-        <li class="feature-card">
-          <h3>하루 계획 확인</h3>
-          <p>하루를 체계적으로 정리하는 방법에 대한 정보를 확인할 수 있습니다.</p>
-        </li>
-      </ul>
+      <div class="tabs" role="tablist" aria-label="기능 선택">
+        <button id ="tab-practice"
+          class="tab is-active"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="feature-practice"
+          data-target="#feature-practice">
+          하루 계획 세우기
+        </button>
+       
+        <button
+          id ="tab-event"
+          class="tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="feature-audience"
+          data-target="#feature-audience">
+          일정 관리 연습
+        </button>
+      
+        <button
+          id ="tab-feedback"
+          class="tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="feature-feedback"
+          data-target="#feature-feedback">
+          하루 계획 확인
+        </button>
+      </div>
+
+      <div 
+        id="feature-practice"
+        class="panel is-active"
+        role="tabpanel"
+        aria-labelledby="tab-practice">
+        <h3>하루 계획 세우기</h3>
+        <p>하루 동안 해야 할 일을 정리하고 우선순위를 정하는 방법을 알아볼 수 있습니다.</p>
+      </div>
+
+      <div
+        id="feature-audience"
+        class="panel "
+        role="tabpanel"
+        aria-labelledby="tab-event"
+        hidden>
+        <h3>일정 관리 연습</h3>
+        <p>시간대별로 일정을 배치하고 효율적으로 시간을 관리하는 방법을 알아볼 수 있습니다.</p>
+      </div>
+
+      <div
+        id="feature-feedback"
+        class="panel "
+        role="tabpanel"
+        aria-labelledby="tab-feedback"
+        hidden>
+        <h3>하루 계획 확인</h3>
+        <p>계획한 일정을 점검하고 하루를 체계적으로 정리하는 방법을 확인할 수 있습니다.</p>
+      </div>
     </section>
     
     <section id ="steps">
@@ -70,6 +118,39 @@
       </ol>
 
     </section>
+
+    <section id="event-practice">
+      <h2> FocusDay 이용 준비 </h2>
+      
+      <div class="event-grid">
+        <article class="event-card">
+          <h3>화면 테마</h3>
+          <button id="themebutton" type="button">다크 모드</button>
+        </article>
+      
+        <article class="event-card">
+          <h3>닉네임 설정</h3>
+          <label for="nickname">닉네임</label>
+          <input type="text" id="nickname" maxlength="10">
+          <p id="nicknamecount" aria-live="polite">0/10</p>
+        </article>
+
+        <article class="event-card">
+          <h3>정보 수집 동의</h3>
+          <label class="agree-row">
+            <input type="checkbox" id="agreecheck">
+            개인정보 수집 및 이용에 동의합니다.
+          </label>
+          <p id="agreemessage" aria-live="polite">
+          동의 여부를 확인해주세요.
+          </p>
+          <button id="startbutton" type="button" disabled>
+            시작하기
+          </button>
+        </article>
+      </div>
+    </section>
+
 
     <section id="subscribe" class="subscribe-card">
       <h2>알림 받기</h2>
