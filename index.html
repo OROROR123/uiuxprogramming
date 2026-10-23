@@ -12,15 +12,15 @@
 <body>
   
   <!--
-  사용자: 하루를 계획하고 정리하는 방법에 관심이 있는 사용자
-  목적: 하루의 할 일과 일정 관리에 관한 정보를 간단하게 확인하기 위해 사용
-  핵심 행동: 서비스 소개 확인, 주요 내용 확인, 이용 방법 확인, 안내 내용 확인
-  정보 순서: 서비스 소개 → 주요 기능 → 사용 방법 → 알림 받기
+  사용자: 하루의 할 일과 일정을 계획하고 정리하려는 사용자
+  목적: 하루 계획을 세우고 점검하는 방법을 안내하고 설정 과정을 연습하기 위해 사용
+  핵심 행동: 안내 확인 → 계획 제목 입력 → 작성 시간과 점검 질문 선택 → 설정 확인 및 완료
+  정보 순서: 서비스 소개 → 주요 기능 → 사용 방법 → 이용 준비 → 계획 설정 → 알림 받기
   -->
 
   <header>  
     <h1>FocusDay</h1>
-    <p>하루를 계획하고 정리하는 방법을 간단하게 소개하는 서비스입니다</p>
+    <p>하루의 할 일과 일정을 간단하게 계획하고 정리해 보세요.</p>
 
     <nav aria-label="메인메뉴">
       <a href="#about">서비스 소개</a>
@@ -28,81 +28,78 @@
       <a href="#steps">사용 방법</a>
       <a href="#subscribe">알림 받기</a>
     </nav>
-
-    
   </header>
 
   <main>
     <section id ="about">
-
       <h2>서비스 소개</h2>
       <h3>하루를 계획하는 방법을 알아보세요</h3>
-    
       <img src="assets/images/qwer.png" alt="할 일 이미지">
-      <p>FocusDay는 하루를 계획하고 정리하는 방법을 간단하게 소개하는 서비스입니다.</p>
-      <p>하루의 할 일과 일정을 정리하는 방법에 대한 내용을 편리하게 확인할 수 있습니다.</p>
+      <p>FocusDay는 하루의 할 일과 일정을 계획하고 정리하는 방법을 소개하는 서비스입니다.</p>
+      <p>계획 제목과 작성 시간을 정하고 하루 점검 질문을 선택하는 과정을 연습할 수 있습니다.</p>
     </section>
     
     <section id ="features">
       <h2>주요 기능</h2>
       <div class="tabs" role="tablist" aria-label="기능 선택">
-        <button id ="tab-practice"
+        <button 
+          id ="tab-plan"
           class="tab is-active"
           type="button"
           role="tab"
           aria-selected="true"
-          aria-controls="feature-practice"
-          data-target="#feature-practice">
+          aria-controls="feature-plan"
+          data-target="#feature-plan">
           하루 계획 세우기
         </button>
        
         <button
-          id ="tab-event"
+          id ="tab-schedule"
           class="tab"
           type="button"
           role="tab"
           aria-selected="false"
-          aria-controls="feature-audience"
-          data-target="#feature-audience">
+          aria-controls="feature-schedule"
+          data-target="#feature-schedule">
           일정 관리 연습
         </button>
       
         <button
-          id ="tab-feedback"
+          id ="tab-review"
           class="tab"
           type="button"
           role="tab"
           aria-selected="false"
-          aria-controls="feature-feedback"
-          data-target="#feature-feedback">
+          aria-controls="feature-review"
+          data-target="#feature-review">
           하루 계획 확인
         </button>
       </div>
 
       <div 
-        id="feature-practice"
+        id="feature-plan"
         class="panel is-active"
         role="tabpanel"
-        aria-labelledby="tab-practice">
+        aria-labelledby="tab-plan">
         <h3>하루 계획 세우기</h3>
         <p>하루 동안 해야 할 일을 정리하고 우선순위를 정하는 방법을 알아볼 수 있습니다.</p>
       </div>
 
       <div
-        id="feature-audience"
+        id="feature-schedule"
         class="panel "
         role="tabpanel"
-        aria-labelledby="tab-event"
+        aria-labelledby="tab-schedule"
         hidden>
         <h3>일정 관리 연습</h3>
         <p>시간대별로 일정을 배치하고 효율적으로 시간을 관리하는 방법을 알아볼 수 있습니다.</p>
       </div>
 
       <div
-        id="feature-feedback"
+        id="feature-review"
         class="panel "
         role="tabpanel"
-        aria-labelledby="tab-feedback"
+        aria-labelledby="tab-review"
         hidden>
         <h3>하루 계획 확인</h3>
         <p>계획한 일정을 점검하고 하루를 체계적으로 정리하는 방법을 확인할 수 있습니다.</p>
@@ -112,43 +109,105 @@
     <section id ="steps">
       <h2>사용 방법</h2>
       <ol>
-        <li>서비스 소개를 읽어 FocusDay의 내용을 확인합니다.</li>
-        <li>주요 기능을 읽으며 하루를 계획하는 방법을 확인합니다.</li>
-        <li>페이지의 안내 내용을 순서대로 살펴봅니다.</li>
+        <li>주요 기능을 살펴보고 FocusDay 이용 준비에서 안내를 확인합니다.</li>
+        <li>하루 계획 제목을 입력하고 계획 작성 시간과 점검 질문을 선택합니다.</li>
+        <li>설정 내용을 확인한 뒤 완료하거나 이전 단계에서 수정합니다.</li>
       </ol>
-
     </section>
 
-    <section id="event-practice">
+    <section id="plan-preferences">
       <h2> FocusDay 이용 준비 </h2>
       
-      <div class="event-grid">
-        <article class="event-card">
+      <div class="preferences-grid">
+        <article class="preferences-card">
           <h3>화면 테마</h3>
           <button id="themebutton" type="button">다크 모드</button>
         </article>
       
-        <article class="event-card">
+        <article class="preferences-card">
           <h3>닉네임 설정</h3>
           <label for="nickname">닉네임</label>
           <input type="text" id="nickname" maxlength="10">
           <p id="nicknamecount" aria-live="polite">0/10</p>
         </article>
 
-        <article class="event-card">
-          <h3>정보 수집 동의</h3>
+        <article class="preferences-card">
+          <h3>설정 안내 확인</h3>
           <label class="agree-row">
             <input type="checkbox" id="agreecheck">
-            개인정보 수집 및 이용에 동의합니다.
+            계획 설정 안내를 확인하고 진행하겠습니다.
           </label>
           <p id="agreemessage" aria-live="polite">
-          동의 여부를 확인해주세요.
+          안내 사항을 확인해 주세요.
           </p>
           <button id="startbutton" type="button" disabled>
-            시작하기
+            설정 시작하기
           </button>
         </article>
       </div>
+    </section>
+
+    <dialog id="planning-dialog" aria-labelledby="planning-dialog-title" aria-describedby="planning-dialog-description">
+      <h2 id="planning-dialog-title"> 하루 계획 설정 안내</h2>
+      <p id="planning-dialog-description">계획 제목과 작성 시간, 점검 질문을 선택할 수 있습니다. 이 화면은 설정 연습으로, 실제 일정이 저장되지는 않습니다.</p>
+      <div class ="dialog-actions">
+        <button id="planning-cancel" type="button">돌아가기 </button>
+        <button id="planning-confirm" type="button"> 안내 확인 후 시작하기</button>
+      </div>
+    </dialog> 
+
+    <section id="planning-flow" class="planning-flow" hidden>
+      <h2> 하루 계획 설정 </h2>
+      <p class="progress" aria-label="설정 진행 단계">
+        <span class="progress-item"> 1. 계획 입력 </span>
+        <span class="progress-item"> 2. 조건 선택 </span>
+        <span class="progress-item"> 3. 내용 확인 </span>
+      </p>
+
+      <section class="step" data-step="1" hidden>
+        <h3> 오늘의 계획 제목을 입력해 주세요.</h3>
+        <label for="plan-title"> 계획 제목 </label>
+        <input id="plan-title" type="text" placeholder="예: 운동과 독서" aria-describedby="plan-title-error">
+        <p id="plan-title-error" class="error-message" aria-live="polite"> </p>
+        <button id="title-next" type="button"> 조건 선택하기</button>
+      </section>
+
+      <section class="step" data-step="2" hidden>
+        <h3> 계획 방식을 선택해 주세요.</h3>
+        <label for="duration-range"> 계획의 상세 정도 </label>
+        <input id="duration-range" type="range" min="0" max="2" step="1" value="1">
+        <output id="duration-value" for="duration-range"> 보통</output>
+        <label><input type="checkbox" id="review-option"> 하루 점검 질문 추가하기 </label> 
+        <fieldset id="review-options" hidden>
+          <legend> 점검 질문 개수</legend>
+          <label><input type="radio" name="review-count" value="1">1개 </label>
+          <label><input type="radio" name="review-count" value="2" checked>2개 </label>
+          <label><input type="radio" name="review-count" value="3">3개 </label>
+        </fieldset>
+        <div class="step-actions">
+          <button id="option-prev" type="button"> 이전</button>
+          <button id="option-next" type="button"> 내용 확인하기</button> 
+        </div>
+      </section>
+
+      <section class="step" data-step="3" hidden>
+        <h3> 설정한 내용을 확인해 주세요.</h3>
+        <div class="summary-list">
+          <div><span>계획 제목</span><strong id="summary-title"></strong></div>
+          <div><span>계획의 상세 정도</span><strong id="summary-duration"></strong></div>
+          <div><span>하루 점검 질문</span><strong id="summary-review"></strong></div>
+        </div>
+        <div class="step-actions">
+          <button id="summary-prev" type="button">수정하기</button>
+          <button id="finish-button" type="button">설정 완료하기</button>
+        </div>  
+      </section>
+
+      <section class="step complete-step" data-step="4" hidden>
+        <h3> 하루 계획 설정 연습이 완료되었습니다.</h3>
+        <p> 설정한 내용을 확인했습니다. 필요하면 다시 설정할 수 있습니다.</p>
+        <button id="restart-button" type="button"> 다시 설정하기</button>
+      </section>
     </section>
 
 

@@ -47,7 +47,7 @@ subscribeForm.addEventListener("submit", handleSubscribe);
 const themebutton = document.querySelector("#themebutton");
 const nicknameinput = document.querySelector("#nickname");
 const nicknameCount = document.querySelector("#nicknamecount");
-const agreecheck = document.querySelector("#agreecheck");
+const agreeCheck = document.querySelector("#agreecheck");
 const agreemessage = document.querySelector("#agreemessage");
 const startbutton = document.querySelector("#startbutton"); 
 
@@ -68,11 +68,11 @@ function handleNicknameInput() {
 nicknameinput.addEventListener("input", handleNicknameInput);
 
 function handleAgreeChange() {
-    const agreed = agreecheck.checked;
+    const agreed = agreeCheck.checked;
 
     startbutton.disabled = !agreed;
     agreemessage .textContent = agreed ? 
-    "시작할 수 있습니다." : "동의 후 시작할 수 있습니다.";
+    "설정을 시작할 수 있습니다." : "안내 사항을 확인해 주세요.";
 
     if (agreed) {
         agreemessage.classList.add("is-ready");
@@ -81,7 +81,7 @@ function handleAgreeChange() {
     }
 }
 
-agreecheck.addEventListener("change", handleAgreeChange);
+agreeCheck.addEventListener("change", handleAgreeChange);
 
 const tabs = document.querySelectorAll(".tab");
 const panels = document.querySelectorAll(".panel");
@@ -117,6 +117,132 @@ function handleTabclick(event) {
 tabs.forEach(function (tab) {
     tab.addEventListener("click", handleTabclick);
 });
+
+const planningFlow = document.querySelector("#planning-flow")
+const flowSteps = planningFlow.querySelectorAll(".step");
+const progressItems = planningFlow.querySelectorAll(".progress-item");
+const titleInput = document.querySelector("#plan-title");
+const titleError = document.querySelector("#plan-title-error");
+const titleNext = document.querySelector("#title-next");
+const durationRange = document.querySelector("#duration-range");
+const durationValue = document.querySelector("#duration-value");
+const reviewOption = document.querySelector("#review-option");
+const reviewOptions = document.querySelector("#review-options");
+const optionPrev = document.querySelector("#option-prev");
+const optionNext = document.querySelector("#option-next");
+const summaryPrev = document.querySelector("#summary-prev");
+const finishButton = document.querySelector("#finish-button");
+const restartButton = document.querySelector("#restart-button");
+const summaryTitle = document.querySelector("#summary-title");
+const summaryDuration = document.querySelector("#summary-duration");
+const summaryReview = document.querySelector("#summary-review");
+const durationValues = ["간단하게", "보통", "자세하게"];
+
+const formData = {
+    title: "", duration: "보통", review: false, reviewCount: "2"
+};
+
+function showstep(index) {
+    flowSteps.forEach((step, i) => { step.hidden = i !== index; });
+    progressItems.forEach((item, i) => {
+        item.classList.toggle("is-active", i === index);
+    });
+}
+
+const planningDialog = document.querySelector("#planning-dialog");
+const planningCancel = document.querySelector("#planning-cancel");
+const planningConfirm = document.querySelector("#planning-confirm");
+
+function revokePlanningAgreement() {
+    agreeCheck.checked = false;
+    planningFlow.hidden = true;
+    handleAgreeChange();
+    agreeCheck.focus();
+}
+
+startbutton.addEventListener("click", () => {
+    if (!agreeCheck.checked) return;
+    planningDialog.showModal();
+});
+planningCancel.addEventListener("click", () => {
+    planningDialog.close();
+    revokePlanningAgreement();
+});
+
+planningDialog.addEventListener("cancel", revokePlanningAgreement);
+
+planningConfirm.addEventListener("click", () => {
+    if (!agreeCheck.checked) return;
+    planningDialog.close();
+    planningFlow.hidden = false;
+    showstep(0);
+    planningFlow.scrollIntoView({behavior: "smooth"});
+    titleInput.focus();
+});
+
+function validateTitle() {
+    const value = titleInput.value.trim();
+    if (!value) {
+        titleError.textContent = "계획 제목을 입력해 주세요.";
+        titleInput.classList.add("has-error");
+        titleInput.focus();
+        return false;
+    }
+
+    titleError.textContent = "";
+    titleInput.classList.remove("has-error");
+    formData.title = value;
+    return true;
+}
+
+titleNext.addEventListener("click", () => {
+    if (!validateTitle()) return;
+    showstep(1);
+});
+
+durationRange.addEventListener("input", () => {
+    durationValue.value = durationValues[durationRange.value];
+});
+
+reviewOption.addEventListener("change", () => {
+    reviewOptions.hidden =! reviewOption.checked;
+});
+
+optionPrev.addEventListener("click", () => showstep(0));
+optionNext.addEventListener("click", () => {
+    formData.duration = durationValues[durationRange.value];
+    formData.review = reviewOption.checked;
+    const count = document.querySelector('input[name="review-count"]:checked');
+    formData.reviewCount = count.value;
+    summaryTitle.textContent = formData.title;
+    summaryDuration.textContent = formData.duration;
+    summaryReview.textContent = formData.review ? formData.reviewCount + "개 포함" : "미포함";
+    showstep(2);
+});
+
+summaryPrev.addEventListener("click", () => showstep(1));
+finishButton.addEventListener("click", () => showstep(3));
+restartButton.addEventListener("click", () => {
+    formData.title = "";
+    formData.duration = "보통";
+    formData.review = false;
+    formData.reviewCount = "2";
+    titleInput.value = "";
+    titleError.textContent = "";
+    titleInput.classList.remove("has-error");
+    durationRange.value = "1";
+    durationValue.value = "보통";
+    reviewOption.checked = false;
+    reviewOptions.hidden = true;
+    document.querySelector('input[name="review-count"][value="2"]').checked = true;
+    summaryTitle.textContent = "";
+    summaryDuration.textContent = "";
+    summaryReview.textContent = "";
+    showstep(0);
+});
+
+
+
 
 
 
