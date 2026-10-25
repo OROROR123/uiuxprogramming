@@ -3,7 +3,7 @@ let issubscribed = false;
 let submitcount = 0;
 
 
-function makesubscribemessege(email, subscribed) {
+function makesubscribemessage(email, subscribed) {
     if (subscribed == true)
         return email + "로 알림 신청이 완료되었습니다. ";
 
@@ -30,7 +30,7 @@ function handleSubscribe(event) {
     submitcount += 1;
 
     subscribeMessage.textContent = 
-      makesubscribemessege(subscribeEmail, issubscribed);
+      makesubscribemessage(subscribeEmail, issubscribed);
       
     
     subscribeMessage.classList.add("is-success");
@@ -71,7 +71,7 @@ function handleAgreeChange() {
     const agreed = agreeCheck.checked;
 
     startbutton.disabled = !agreed;
-    agreemessage .textContent = agreed ? 
+    agreemessage.textContent = agreed ? 
     "설정을 시작할 수 있습니다." : "안내 사항을 확인해 주세요.";
 
     if (agreed) {
@@ -109,16 +109,16 @@ function activateTab(clickedTab) {
     targetPanel.hidden = false;
 }
 
-function handleTabclick(event) {
+function handleTabClick(event) {
     resetTabsAndPanel();
     activateTab(event.currentTarget);
 }
 
 tabs.forEach(function (tab) {
-    tab.addEventListener("click", handleTabclick);
+    tab.addEventListener("click", handleTabClick);
 });
 
-const planningFlow = document.querySelector("#planning-flow")
+const planningFlow = document.querySelector("#planning-flow");
 const flowSteps = planningFlow.querySelectorAll(".step");
 const progressItems = planningFlow.querySelectorAll(".progress-item");
 const titleInput = document.querySelector("#plan-title");
@@ -133,6 +133,18 @@ const optionNext = document.querySelector("#option-next");
 const summaryPrev = document.querySelector("#summary-prev");
 const finishButton = document.querySelector("#finish-button");
 const restartButton = document.querySelector("#restart-button");
+const openChecklist = document.querySelector("#open-checklist");
+const checklistBack = document.querySelector("#checklist-back");
+const checklistRestart = document.querySelector("#checklist-restart");
+const checklistPlanTitle = document.querySelector("#checklist-plan-title");
+const taskForm = document.querySelector("#task-form");
+const taskInput = document.querySelector("#task-input");
+const taskError = document.querySelector("#task-error");
+const taskList = document.querySelector("#task-list");
+const taskEmptyMessage = document.querySelector("#task-empty-message");
+const taskCompleteMessage = document.querySelector("#task-complete-message");
+const taskProgressText = document.querySelector("#task-progress-text");
+const taskProgress = document.querySelector("#task-progress");
 const summaryTitle = document.querySelector("#summary-title");
 const summaryDuration = document.querySelector("#summary-duration");
 const summaryReview = document.querySelector("#summary-review");
@@ -205,7 +217,7 @@ durationRange.addEventListener("input", () => {
 });
 
 reviewOption.addEventListener("change", () => {
-    reviewOptions.hidden =! reviewOption.checked;
+    reviewOptions.hidden = !reviewOption.checked;
 });
 
 optionPrev.addEventListener("click", () => showstep(0));
@@ -222,7 +234,94 @@ optionNext.addEventListener("click", () => {
 
 summaryPrev.addEventListener("click", () => showstep(1));
 finishButton.addEventListener("click", () => showstep(3));
-restartButton.addEventListener("click", () => {
+
+function updateTaskProgress() {
+    const tasks = taskList.querySelectorAll("li");
+    const checkedTasks = taskList.querySelectorAll('input[type="checkbox"]:checked');
+
+    taskProgressText.textContent = checkedTasks.length + " / " + tasks.length + "개 완료";
+    taskProgress.max = tasks.length === 0 ? 1 : tasks.length;
+    taskProgress.value = checkedTasks.length;
+
+    taskEmptyMessage.hidden = tasks.length !== 0;
+    taskCompleteMessage.hidden = tasks.length === 0 || checkedTasks.length !== tasks.length;
+}
+
+function addTask(event) {
+    event.preventDefault();
+    const taskText = taskInput.value.trim();
+
+    if (taskText === "") {
+        taskError.textContent = "할 일을 입력한 뒤 추가해 주세요.";
+        taskInput.classList.add("has-error");
+        taskInput.focus();
+        return;
+    }
+
+    taskError.textContent = "";
+    taskInput.classList.remove("has-error");
+
+    const listItem = document.createElement("li");
+    const taskLabel = document.createElement("label");
+    const checkbox = document.createElement("input");
+    const taskName = document.createElement("span");
+    const removeButton = document.createElement("button");
+
+    checkbox.type = "checkbox";
+    taskName.textContent = taskText;
+    taskLabel.appendChild(checkbox);
+    taskLabel.appendChild(taskName);
+    removeButton.type = "button";
+    removeButton.textContent = "삭제";
+    removeButton.setAttribute("aria-label", taskText + " 삭제");
+
+    listItem.appendChild(taskLabel);
+    listItem.appendChild(removeButton);
+    taskList.appendChild(listItem);
+
+    checkbox.addEventListener("change", function () {
+        listItem.classList.toggle("is-done", checkbox.checked);
+        updateTaskProgress();
+    });
+
+    removeButton.addEventListener("click", function () {
+        listItem.remove();
+        updateTaskProgress();
+        taskInput.focus();
+    });
+
+    taskInput.value = "";
+    taskInput.focus();
+    updateTaskProgress();
+}
+
+taskForm.addEventListener("submit", addTask);
+taskInput.addEventListener("input", function () {
+    taskError.textContent = "";
+    taskInput.classList.remove("has-error");
+});
+
+openChecklist.addEventListener("click", function () {
+    checklistPlanTitle.textContent = formData.title;
+    showstep(4);
+    updateTaskProgress();
+    taskInput.focus();
+});
+
+checklistBack.addEventListener("click", function () {
+    showstep(3);
+});
+
+function resetChecklist() {
+    taskList.textContent = "";
+    taskInput.value = "";
+    taskError.textContent = "";
+    taskInput.classList.remove("has-error");
+    checklistPlanTitle.textContent = "";
+    updateTaskProgress();
+}
+
+function restartPlanning() {
     formData.title = "";
     formData.duration = "보통";
     formData.review = false;
@@ -238,12 +337,13 @@ restartButton.addEventListener("click", () => {
     summaryTitle.textContent = "";
     summaryDuration.textContent = "";
     summaryReview.textContent = "";
+    resetChecklist();
     showstep(0);
-});
+    titleInput.focus();
+}
 
-
-
-
+restartButton.addEventListener("click", restartPlanning);
+checklistRestart.addEventListener("click", restartPlanning);
 
 
 

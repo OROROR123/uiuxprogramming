@@ -14,8 +14,8 @@
   <!--
   사용자: 하루의 할 일과 일정을 계획하고 정리하려는 사용자
   목적: 하루 계획을 세우고 점검하는 방법을 안내하고 설정 과정을 연습하기 위해 사용
-  핵심 행동: 안내 확인 → 계획 제목 입력 → 작성 시간과 점검 질문 선택 → 설정 확인 및 완료
-  정보 순서: 서비스 소개 → 주요 기능 → 사용 방법 → 이용 준비 → 계획 설정 → 알림 받기
+  핵심 행동: 안내 확인 → 계획 제목 입력 → 상세 정도와 점검 질문 선택 → 설정 완료 → 할 일 추가 및 완료 관리
+  정보 순서: 서비스 소개 → 주요 기능 → 사용 방법 → 이용 준비 → 계획 설정 → 체크리스트 → 알림 받기
   -->
 
   <header>  
@@ -36,7 +36,7 @@
       <h3>하루를 계획하는 방법을 알아보세요</h3>
       <img src="assets/images/qwer.png" alt="할 일 이미지">
       <p>FocusDay는 하루의 할 일과 일정을 계획하고 정리하는 방법을 소개하는 서비스입니다.</p>
-      <p>계획 제목과 작성 시간을 정하고 하루 점검 질문을 선택하는 과정을 연습할 수 있습니다.</p>
+      <p>계획 제목과 상세 정도, 하루 점검 질문을 선택하고 할 일 체크리스트로 완료 상태를 관리할 수 있습니다.</p>
     </section>
     
     <section id ="features">
@@ -110,8 +110,9 @@
       <h2>사용 방법</h2>
       <ol>
         <li>주요 기능을 살펴보고 FocusDay 이용 준비에서 안내를 확인합니다.</li>
-        <li>하루 계획 제목을 입력하고 계획 상세 정도와 점검 질문을 선택합니다.</li>
+        <li>하루 계획 제목을 입력하고 계획의 상세 정도와 점검 질문을 선택합니다.</li>
         <li>설정 내용을 확인한 뒤 완료하거나 이전 단계에서 수정합니다.</li>
+        <li>설정 완료 후 할 일을 추가하고 체크박스로 완료 상태를 관리합니다.</li>
       </ol>
     </section>
 
@@ -205,10 +206,46 @@
 
       <section class="step complete-step" data-step="4" hidden>
         <h3> 하루 계획 설정이 완료되었습니다.</h3>
-        <p> 설정한 내용을 확인했습니다. 필요하면 다시 설정할 수 있습니다.</p>
-        <button id="restart-button" type="button"> 다시 설정하기</button>
+        <p> 설정한 내용을 확인했습니다. 이제 오늘의 할 일을 추가하고 완료 여부를 관리해 보세요.</p>
+        <div class="step-actions">
+          <button id="restart-button" type="button"> 다시 설정하기</button>
+          <button id="open-checklist" type="button"> 할 일 체크리스트 시작하기</button>
+        </div>
+      </section>
+
+      <section class="step checklist-step" data-step="5" hidden>
+        <h3>오늘의 할 일을 관리해 보세요.</h3>
+        <p>설정한 계획: <strong id="checklist-plan-title"></strong></p>
+        <p>할 일을 입력해 추가하고, 끝낸 일은 체크박스를 선택하세요.</p>
+
+        <form id="task-form" class="task-form" novalidate>
+          <div class="task-input-group">
+            <label for="task-input">새 할 일 (최대 40자)</label>
+            <input id="task-input" type="text" maxlength="40"
+              placeholder="예: 강의 자료 정리하기" autocomplete="off"
+              aria-describedby="task-error">
+          </div>
+          <button type="submit">할 일 추가하기</button>
+        </form>
+        <p id="task-error" class="error-message" role="alert"></p>
+
+        <div class="task-summary">
+          <p id="task-progress-text" aria-live="polite">0 / 0개 완료</p>
+          <progress id="task-progress" value="0" max="1" aria-label="할 일 완료 진행률"></progress>
+        </div>
+        <p id="task-empty-message" aria-live="polite">등록된 할 일이 없습니다. 첫 번째 할 일을 추가해 주세요.</p>
+        <p id="task-complete-message" class="task-complete-message" role="status" hidden>
+          모든 할 일을 완료했습니다! 필요하면 완료 체크를 해제하거나 새 할 일을 추가할 수 있습니다.
+        </p>
+        <ul id="task-list" class="task-list" aria-label="등록된 할 일"></ul>
+
+        <div class="step-actions">
+          <button id="checklist-back" type="button"> 설정 완료 화면으로 돌아가기</button>
+          <button id="checklist-restart" type="button"> 새 계획 설정하기</button>
+        </div>
       </section>
     </section>
+    
 
 
     <section id="subscribe" class="subscribe-card">
