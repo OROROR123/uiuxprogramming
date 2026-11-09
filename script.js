@@ -145,6 +145,16 @@ const taskEmptyMessage = document.querySelector("#task-empty-message");
 const taskCompleteMessage = document.querySelector("#task-complete-message");
 const taskProgressText = document.querySelector("#task-progress-text");
 const taskProgress = document.querySelector("#task-progress");
+const taskHelp = document.querySelector("#task-help");
+const taskCharCount = document.querySelector("#task-char-count");
+const taskSubmitButton = document.querySelector("#task-submit-button");
+const taskSubmitStatus = document.querySelector("#task-submit-status");
+const taskNoteOption = document.querySelector("#task-note-option");
+const taskNoteFields = document.querySelector("#task-note-fields");
+const taskNote = document.querySelector("#task-note");
+const taskNoteError = document.querySelector("#task-note-error");
+let isSubmittingTask = false;
+let taskSubmitTimer = null;
 const summaryTitle = document.querySelector("#summary-title");
 const summaryDuration = document.querySelector("#summary-duration");
 const summaryReview = document.querySelector("#summary-review");
@@ -218,6 +228,8 @@ durationRange.addEventListener("input", () => {
 
 reviewOption.addEventListener("change", () => {
     reviewOptions.hidden = !reviewOption.checked;
+    reviewOptions.disabled = !reviewOption.checked;
+    reviewOption.setAttribute("aria-expanded", String(reviewOption.checked));
 });
 
 optionPrev.addEventListener("click", () => showstep(0));
@@ -247,30 +259,82 @@ function updateTaskProgress() {
     taskCompleteMessage.hidden = tasks.length === 0 || checkedTasks.length !== tasks.length;
 }
 
-function addTask(event) {
-    event.preventDefault();
-    const taskText = taskInput.value.trim();
+function updateTaskInputFeedback() {
+    const raw = taskInput.value;
+    const length = raw.length;
+    const valid = raw.trim().length >= 2;
 
-    if (taskText === "") {
-        taskError.textContent = "할 일을 입력한 뒤 추가해 주세요.";
-        taskInput.classList.add("has-error");
-        taskInput.focus();
-        return;
+    taskCharCount.textContent = length + " / 40자";
+    taskInput.classList.toggle("is-valid", valid);
+    taskHelp.textContent = raw.trim().length === 0 ? "2~40자로 입력해 주세요."
+        : valid ? "입력 조건을 충족했습니다." : "할 일을 2자 이상 입력해 주세요.";
+    taskHelp.classList.toggle("is-valid", valid);
+    if (valid) {
+        taskError.textContent = "";
+        taskInput.classList.remove("has-error");
+        taskInput.setAttribute("aria-invalid", "false");
+    } else if (taskInput.classList.contains("has-error")) {
+        taskError.textContent = raw.trim().length === 0 ? "할 일을 입력해 주세요."
+            : "할 일을 2자 이상 입력해 주세요.";
     }
+}
 
-    taskError.textContent = "";
-    taskInput.classList.remove("has-error");
+function updateTaskNoteFields() {
+    const enabled = taskNoteOption.checked;
+    taskNoteFields.hidden = !enabled;
+    taskNote.disabled = !enabled || isSubmittingTask;
+    taskNote.required = enabled;
+    taskNoteOption.setAttribute("aria-expanded", String(enabled));
+    taskNoteError.textContent = "";
+    taskNote.classList.remove("has-error");
+    taskNote.setAttribute("aria-invalid", "false");
+}
 
+function setTaskSubmitState(isLoading) {
+    isSubmittingTask = isLoading;
+    taskForm.setAttribute("aria-busy", String(isLoading));
+    taskSubmitButton.disabled = isLoading;
+    taskSubmitButton.textContent = isLoading ? "추가 중…" : "할 일 추가하기";
+    taskInput.disabled = isLoading;
+    taskNoteOption.disabled = isLoading;
+    taskNote.disabled = isLoading || !taskNoteOption.checked;
+}
+
+function showTaskSubmitMessage(message, status) {
+    taskSubmitStatus.textContent = message;
+    taskSubmitStatus.className = "task-submit-status";
+    if (status) taskSubmitStatus.classList.add("is-" + status);
+}
+
+function showTaskInputError(message, input, error) {
+    error.textContent = message;
+    input.classList.add("has-error");
+    input.setAttribute("aria-invalid", "true");
+    showTaskSubmitMessage("", "");
+    input.focus();
+}
+
+function addTaskToList(taskText, taskNoteText) {
     const listItem = document.createElement("li");
     const taskLabel = document.createElement("label");
     const checkbox = document.createElement("input");
+    const taskInfo = document.createElement("span");
     const taskName = document.createElement("span");
     const removeButton = document.createElement("button");
 
     checkbox.type = "checkbox";
+    taskInfo.className = "task-info";
+    taskName.className = "task-name";
     taskName.textContent = taskText;
+    taskInfo.appendChild(taskName);
+    if (taskNoteText) {
+        const noteLabel = document.createElement("small");
+        noteLabel.className = "task-note-label";
+        noteLabel.textContent = "메모: " + taskNoteText;
+        taskInfo.appendChild(noteLabel);
+    }
     taskLabel.appendChild(checkbox);
-    taskLabel.appendChild(taskName);
+    taskLabel.appendChild(taskInfo);
     removeButton.type = "button";
     removeButton.textContent = "삭제";
     removeButton.setAttribute("aria-label", taskText + " 삭제");
@@ -283,22 +347,75 @@ function addTask(event) {
         listItem.classList.toggle("is-done", checkbox.checked);
         updateTaskProgress();
     });
-
     removeButton.addEventListener("click", function () {
         listItem.remove();
         updateTaskProgress();
         taskInput.focus();
     });
-
-    taskInput.value = "";
-    taskInput.focus();
     updateTaskProgress();
+}
+
+function addTask(event) {
+    event.preventDefault();
+    if (isSubmittingTask) return;
+
+    const taskText = taskInput.value.trim();
+    const taskNoteText = taskNoteOption.checked ? taskNote.value.trim() : "";
+
+    if (taskText.length === 0) {
+        showTaskInputError("할 일을 입력해 주세요.", taskInput, taskError);
+        return;
+    }
+    if (taskText.length < 2) {
+        showTaskInputError("할 일을 2자 이상 입력해 주세요.", taskInput, taskError);
+        return;
+    }
+    if (taskNoteOption.checked && !taskNoteText) {
+        showTaskInputError("메모를 입력하거나 메모 추가를 해제해 주세요.", taskNote, taskNoteError);
+        return;
+    }
+
+    showTaskSubmitMessage("할 일을 추가하고 있습니다.", "loading");
+    setTaskSubmitState(true);
+    taskSubmitTimer = setTimeout(function () {
+        taskSubmitTimer = null;
+        const existing = taskList.querySelectorAll(".task-name");
+        let duplicate = false;
+        existing.forEach(function (item) {
+            if (item.textContent === taskText) duplicate = true;
+        });
+        setTaskSubmitState(false);
+        if (duplicate) {
+            showTaskSubmitMessage("추가 실패: 같은 할 일이 이미 있습니다. 내용을 수정한 뒤 다시 추가해 주세요.", "error");
+            taskInput.focus();
+            return;
+        }
+
+        addTaskToList(taskText, taskNoteText);
+        taskInput.value = "";
+        taskNote.value = "";
+        updateTaskInputFeedback();
+        showTaskSubmitMessage("할 일을 체크리스트에 추가했습니다.", "success");
+        taskInput.focus();
+    }, 600);
 }
 
 taskForm.addEventListener("submit", addTask);
 taskInput.addEventListener("input", function () {
-    taskError.textContent = "";
-    taskInput.classList.remove("has-error");
+    updateTaskInputFeedback();
+    showTaskSubmitMessage("", "");
+});
+taskNoteOption.addEventListener("change", function () {
+    updateTaskNoteFields();
+    showTaskSubmitMessage("", "");
+});
+taskNote.addEventListener("input", function () {
+    if (taskNote.value.trim() !== "") {
+        taskNoteError.textContent = "";
+        taskNote.classList.remove("has-error");
+        taskNote.setAttribute("aria-invalid", "false");
+    }
+    showTaskSubmitMessage("", "");
 });
 
 openChecklist.addEventListener("click", function () {
@@ -309,14 +426,26 @@ openChecklist.addEventListener("click", function () {
 });
 
 checklistBack.addEventListener("click", function () {
+    if (isSubmittingTask) return;
     showstep(3);
 });
 
 function resetChecklist() {
+    if (taskSubmitTimer !== null) {
+        clearTimeout(taskSubmitTimer);
+        taskSubmitTimer = null;
+    }
+    setTaskSubmitState(false);
     taskList.textContent = "";
     taskInput.value = "";
     taskError.textContent = "";
     taskInput.classList.remove("has-error");
+    taskInput.setAttribute("aria-invalid", "false");
+    taskNoteOption.checked = false;
+    taskNote.value = "";
+    updateTaskNoteFields();
+    updateTaskInputFeedback();
+    showTaskSubmitMessage("", "");
     checklistPlanTitle.textContent = "";
     updateTaskProgress();
 }
@@ -333,6 +462,8 @@ function restartPlanning() {
     durationValue.value = "보통";
     reviewOption.checked = false;
     reviewOptions.hidden = true;
+    reviewOptions.disabled = true;
+    reviewOption.setAttribute("aria-expanded", "false");
     document.querySelector('input[name="review-count"][value="2"]').checked = true;
     summaryTitle.textContent = "";
     summaryDuration.textContent = "";
@@ -346,6 +477,3 @@ restartButton.addEventListener("click", restartPlanning);
 checklistRestart.addEventListener("click", restartPlanning);
 
 
-
-
- 

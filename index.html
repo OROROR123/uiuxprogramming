@@ -178,8 +178,8 @@
         <label for="duration-range"> 계획의 상세 정도 </label>
         <input id="duration-range" type="range" min="0" max="2" step="1" value="1">
         <output id="duration-value" for="duration-range"> 보통</output>
-        <label><input type="checkbox" id="review-option"> 하루 점검 질문 추가하기 </label> 
-        <fieldset id="review-options" hidden>
+        <label><input type="checkbox" id="review-option" aria-controls="review-options" aria-expanded="false"> 하루 점검 질문 추가하기 </label> 
+        <fieldset id="review-options" hidden disabled>
           <legend> 점검 질문 개수</legend>
           <label><input type="radio" name="review-count" value="1">1개 </label>
           <label><input type="radio" name="review-count" value="2" checked>2개 </label>
@@ -218,16 +218,36 @@
         <p>설정한 계획: <strong id="checklist-plan-title"></strong></p>
         <p>할 일을 입력해 추가하고, 끝낸 일은 체크박스를 선택하세요.</p>
 
-        <form id="task-form" class="task-form" novalidate>
-          <div class="task-input-group">
-            <label for="task-input">새 할 일 (최대 40자)</label>
-            <input id="task-input" type="text" maxlength="40"
-              placeholder="예: 강의 자료 정리하기" autocomplete="off"
-              aria-describedby="task-error">
+        <form id="task-form" class="task-form" novalidate aria-busy="false">
+          <div class="task-form-row">
+            <div class="task-input-group">
+              <label for="task-input">새 할 일 (필수)</label>
+              <input id="task-input" name="taskName" type="text" minlength="2" maxlength="40" required
+                placeholder="예: 강의 자료 정리하기" autocomplete="off"
+                aria-describedby="task-help task-char-count task-error" aria-invalid="false">
+              <div class="task-field-meta">
+                <p id="task-help">2~40자로 입력해 주세요.</p>
+                <p id="task-char-count" aria-live="polite">0 / 40자</p>
+              </div>
+            </div>
+            <button id="task-submit-button" type="submit">할 일 추가하기</button>
           </div>
-          <button type="submit">할 일 추가하기</button>
+          <div class="task-extra-options">
+            <label class="task-note-toggle">
+              <input id="task-note-option" name="noteOption" type="checkbox"
+                aria-controls="task-note-fields" aria-expanded="false">
+              메모 추가 (선택)
+            </label>
+            <div id="task-note-fields" class="task-note-fields" hidden>
+              <label for="task-note">메모 (최대 30자)</label>
+              <input id="task-note" name="taskNote" type="text" maxlength="30" disabled
+                placeholder="예: 준비물 챙기기" aria-describedby="task-note-error" aria-invalid="false">
+              <p id="task-note-error" class="error-message" role="alert"></p>
+            </div>
+          </div>
         </form>
         <p id="task-error" class="error-message" role="alert"></p>
+        <p id="task-submit-status" class="task-submit-status" role="status" aria-live="polite"></p>
 
         <div class="task-summary">
           <p id="task-progress-text" aria-live="polite">0 / 0개 완료</p>
@@ -271,3 +291,5 @@
 
 </body>
 </html>
+
+

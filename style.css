@@ -383,9 +383,127 @@ body.dark .planning-flow .progress-item.is-active {
 
 .checklist-step .task-form {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: stretch;
   gap: 12px;
 }
+
+.checklist-step .task-form-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: 100%;
+}
+
+.checklist-step .task-form-row button {
+  flex: 0 0 auto;
+}
+
+.checklist-step .task-field-meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.checklist-step .task-field-meta p,
+.checklist-step .task-note-fields p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.checklist-step .task-field-meta p { color: #55636C; }
+.checklist-step .task-field-meta p.is-valid { color: #245B51; }
+.checklist-step #task-char-count { white-space: nowrap; }
+
+.checklist-step .task-extra-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.checklist-step .task-note-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.checklist-step .task-note-fields {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.checklist-step .task-note-fields[hidden] { display: none; }
+.checklist-step .task-note-fields > label { font-weight: 700; }
+.checklist-step #task-note { flex: 0 1 auto; width: min(100%, 260px); }
+.checklist-step .task-note-fields .error-message { margin: 0; flex-basis: 100%; }
+.checklist-step .task-note-fields .error-message:empty,
+.checklist-step #task-error:empty,
+.checklist-step #task-submit-status:empty { display: none; }
+
+.checklist-step #task-input.is-valid {
+  border-color: #2F7D76;
+  background-color: #EAF8F1;
+}
+.checklist-step #task-note.has-error { border-color: #B54747; }
+
+.checklist-step .task-submit-status {
+  min-height: 24px;
+  padding: 0;
+  margin: 8px 0;
+  font-weight: 700;
+}
+.checklist-step .task-submit-status.is-loading,
+.checklist-step .task-submit-status.is-success,
+.checklist-step .task-submit-status.is-error {
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+.checklist-step .task-submit-status.is-loading { background: #EAF3F1; color: #245B51; }
+.checklist-step .task-submit-status.is-success { background: #DCECE7; color: #245B51; }
+.checklist-step .task-submit-status.is-error { background: #FFF1EF; color: #A33838; }
+
+.checklist-step #task-submit-button:disabled {
+  background: #647C86;
+  cursor: wait;
+}
+
+.checklist-step .task-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.checklist-step .task-note-label {
+  font-size: 14px;
+  color: #55636C;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+body.dark .checklist-step .task-submit-status.is-loading,
+body.dark .checklist-step .task-submit-status.is-success {
+  background: #30434A;
+  border-color: #4B6266;
+}
+body.dark .checklist-step #task-input.is-valid {
+  background-color: #294B42;
+  border-color: #A8CFC5;
+  color: #EAF3F1;
+}
+body.dark .checklist-step .task-field-meta p,
+body.dark .checklist-step .task-note-label { color: #A8CFC5; }
+body.dark .checklist-step .task-field-meta p.is-valid { color: #A5E4CE; }
+body.dark .checklist-step .task-submit-status.is-loading,
+body.dark .checklist-step .task-submit-status.is-success { color: #A5E4CE; }
+body.dark .checklist-step .task-submit-status.is-error { background: #54373A; color: #FFB4B4; }
+
 
 .checklist-step .task-input-group {
   flex: 1;
@@ -581,8 +699,9 @@ body.dark .checklist-step .task-list li.is-done label span {
   .planning-flow .step-actions button {width: 100%;}
   .planning-flow input[type="checkbox"],
   .planning-flow input[type="radio"] {width: auto;}
-  .checklist-step .task-form {flex-direction: column; align-items: stretch;}
-  .checklist-step .task-form button {width: 100%;}
+  .checklist-step .task-form-row {flex-direction: column; align-items: stretch;}
+  .checklist-step .task-form-row button {width: 100%;}
+  .checklist-step .task-note-toggle {width: auto;}
   .checklist-step .task-list li button {width: auto; min-height: 44px;}
 }
 
