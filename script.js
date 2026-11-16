@@ -118,6 +118,37 @@ tabs.forEach(function (tab) {
     tab.addEventListener("click", handleTabClick);
 });
 
+const mainNav = document.querySelector("#main-nav");
+const menuToggle = document.querySelector("#menu-toggle");
+const navLinks = document.querySelectorAll(".main-nav a");
+
+function updateCurrentNav() {
+    const hash = window.location.hash;
+    navLinks.forEach(function (link) {
+        const current = hash ? link.getAttribute("href") === hash : link === navLinks[0];
+        link.classList.toggle("is-current", current);
+        if (current) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+    });
+}
+
+window.addEventListener("hashchange", updateCurrentNav);
+updateCurrentNav();
+
+menuToggle.addEventListener("click", function () {
+    const isOpen = mainNav.classList.toggle("is-open");
+    menuToggle.textContent = isOpen ? "메뉴 닫기" : "메뉴 열기";
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+});
+
+navLinks.forEach(function (link) {
+    link.addEventListener("click", function () {
+        mainNav.classList.remove("is-open");
+        menuToggle.textContent = "메뉴 열기";
+        menuToggle.setAttribute("aria-expanded", "false");
+    });
+});
+
 const planningFlow = document.querySelector("#planning-flow");
 const flowSteps = planningFlow.querySelectorAll(".step");
 const progressItems = planningFlow.querySelectorAll(".progress-item");
@@ -145,6 +176,10 @@ const taskEmptyMessage = document.querySelector("#task-empty-message");
 const taskCompleteMessage = document.querySelector("#task-complete-message");
 const taskProgressText = document.querySelector("#task-progress-text");
 const taskProgress = document.querySelector("#task-progress");
+const taskFilterButtons = document.querySelectorAll(".task-filter-button");
+const taskFilterCount = document.querySelector("#task-filter-count");
+const taskFilterEmptyMessage = document.querySelector("#task-filter-empty-message");
+let currentTaskFilter = "all";
 const taskHelp = document.querySelector("#task-help");
 const taskCharCount = document.querySelector("#task-char-count");
 const taskSubmitButton = document.querySelector("#task-submit-button");
@@ -257,7 +292,43 @@ function updateTaskProgress() {
 
     taskEmptyMessage.hidden = tasks.length !== 0;
     taskCompleteMessage.hidden = tasks.length === 0 || checkedTasks.length !== tasks.length;
+    updateTaskFilter();
 }
+
+function updateTaskFilter() {
+    const tasks = taskList.querySelectorAll("li");
+    let visibleCount = 0;
+
+    tasks.forEach(function (item) {
+        const done = item.classList.contains("is-done");
+        const visible = currentTaskFilter === "all" ||
+            (currentTaskFilter === "todo" && !done) ||
+            (currentTaskFilter === "done" && done);
+        item.hidden = !visible;
+        if (visible) visibleCount += 1;
+    });
+
+    taskFilterButtons.forEach(function (button) {
+        const active = button.dataset.filter === currentTaskFilter;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+    });
+
+    taskFilterCount.textContent = "표시 중인 할 일: " + visibleCount + "개";
+    taskFilterEmptyMessage.hidden = tasks.length === 0 || visibleCount !== 0;
+    if (visibleCount === 0) {
+        taskFilterEmptyMessage.textContent = currentTaskFilter === "done"
+            ? "완료한 할 일이 없습니다. 다른 필터를 선택해 주세요."
+            : "미완료인 할 일이 없습니다. 다른 필터를 선택해 주세요.";
+    }
+}
+
+taskFilterButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+        currentTaskFilter = button.dataset.filter;
+        updateTaskFilter();
+    });
+});
 
 function updateTaskInputFeedback() {
     const raw = taskInput.value;
@@ -437,6 +508,7 @@ function resetChecklist() {
     }
     setTaskSubmitState(false);
     taskList.textContent = "";
+    currentTaskFilter = "all";
     taskInput.value = "";
     taskError.textContent = "";
     taskInput.classList.remove("has-error");

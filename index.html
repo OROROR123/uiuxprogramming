@@ -18,16 +18,21 @@
   정보 순서: 서비스 소개 → 주요 기능 → 사용 방법 → 이용 준비 → 계획 설정 → 체크리스트 → 알림 받기
   -->
 
-  <header>  
-    <h1>FocusDay</h1>
+  <header>
+    <div class="header-menu-row">
+      <h1>FocusDay</h1>
+      <button id="menu-toggle" class="menu-toggle" type="button"
+        aria-controls="main-nav" aria-expanded="false">메뉴 열기</button>
+      <nav id="main-nav" class="main-nav" aria-label="주요 메뉴">
+        <ul>
+          <li><a href="#about">서비스 소개</a></li>
+          <li><a href="#features">주요 기능</a></li>
+          <li><a href="#steps">사용 방법</a></li>
+          <li><a href="#subscribe">알림 받기</a></li>
+        </ul>
+      </nav>
+    </div>
     <p>하루의 할 일과 일정을 간단하게 계획하고 정리해 보세요.</p>
-
-    <nav aria-label="메인메뉴">
-      <a href="#about">서비스 소개</a>
-      <a href="#features">주요 기능</a>
-      <a href="#steps">사용 방법</a>
-      <a href="#subscribe">알림 받기</a>
-    </nav>
   </header>
 
   <main>
@@ -253,7 +258,14 @@
           <p id="task-progress-text" aria-live="polite">0 / 0개 완료</p>
           <progress id="task-progress" value="0" max="1" aria-label="할 일 완료 진행률"></progress>
         </div>
+        <div class="task-filters" role="group" aria-label="할 일 표시 범위">
+          <button class="task-filter-button is-active" type="button" data-filter="all" aria-pressed="true">전체</button>
+          <button class="task-filter-button" type="button" data-filter="todo" aria-pressed="false">미완료</button>
+          <button class="task-filter-button" type="button" data-filter="done" aria-pressed="false">완료</button>
+        </div>
+        <p id="task-filter-count" aria-live="polite">표시 중인 할 일: 0개</p>
         <p id="task-empty-message" aria-live="polite">등록된 할 일이 없습니다. 첫 번째 할 일을 추가해 주세요.</p>
+        <p id="task-filter-empty-message" aria-live="polite" hidden>선택한 상태의 할 일이 없습니다. 다른 필터를 선택해 주세요.</p>
         <p id="task-complete-message" class="task-complete-message" role="status" hidden>
           모든 할 일을 완료했습니다! 필요하면 완료 체크를 해제하거나 새 할 일을 추가할 수 있습니다.
         </p>

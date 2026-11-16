@@ -53,6 +53,45 @@ nav a {
   text-decoration: none;
 }
 
+.header-menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-menu-row h1 { flex-shrink: 0; }
+.header-menu-row .main-nav { margin-top: 0; margin-left: auto; }
+
+.menu-toggle { display: none; }
+
+.main-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.main-nav a {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.main-nav a.is-current {
+  color: #245B51;
+  background-color: #DCECE7;
+  box-shadow: inset 0 -3px 0 #2F7D76;
+}
+
+.main-nav a:focus-visible {
+  outline: 3px solid #76A9A3;
+  outline-offset: 2px;
+}
+
 h1 {
   font-size: 32px;
   font-weight: 800;
@@ -285,6 +324,12 @@ body.dark .subscribe-card {
 .panel[hidden] {
   display: none;
   
+}
+
+body.dark .main-nav a.is-current {
+  color: #EAF3F1;
+  background-color: #245B51;
+  box-shadow: inset 0 -3px 0 #A8CFC5;
 }
 
 body.dark .tab {
@@ -534,6 +579,54 @@ body.dark .checklist-step .task-submit-status.is-error { background: #54373A; co
   border-color: #B54747;
 }
 
+.checklist-step .task-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+
+.checklist-step .task-filter-button {
+  color: #2F7D76;
+  background-color: #EAF3F1;
+  border: 1px solid #C9DDD9;
+}
+
+.checklist-step .task-filter-button.is-active {
+  color: #FFFFFF;
+  background-color: #3C6E91;
+  border-color: #3C6E91;
+  box-shadow: inset 0 -3px 0 #EAF3F1;
+}
+
+.checklist-step #task-filter-count { margin: 0 0 8px; }
+
+.checklist-step #task-filter-empty-message {
+  padding: 12px;
+  border: 1px solid #C9DDD9;
+  border-radius: 10px;
+  background-color: #F7F9F7;
+}
+
+.checklist-step #task-filter-empty-message[hidden] { display: none; }
+
+body.dark .checklist-step .task-filter-button {
+  color: #A8CFC5;
+  background-color: #30434A;
+  border-color: #4B6266;
+}
+
+body.dark .checklist-step .task-filter-button.is-active {
+  color: #EAF3F1;
+  background-color: #245B51;
+  border-color: #A8CFC5;
+}
+
+body.dark .checklist-step #task-filter-empty-message {
+  background-color: #24323D;
+  border-color: #4B6266;
+}
+
 .checklist-step .task-summary {
   padding: 16px;
   border: 1px solid #C9DDD9;
@@ -571,6 +664,8 @@ body.dark .checklist-step .task-submit-status.is-error { background: #54373A; co
   border-radius: 10px;
   background-color: #F7F9F7;
 }
+
+.checklist-step .task-list li[hidden] { display: none; }
 
 .checklist-step .task-list label {
   display: flex;
@@ -703,6 +798,19 @@ body.dark .checklist-step .task-list li.is-done label span {
   .checklist-step .task-form-row button {width: 100%;}
   .checklist-step .task-note-toggle {width: auto;}
   .checklist-step .task-list li button {width: auto; min-height: 44px;}
+}
+
+@media (max-width: 600px) {
+  .header-menu-row { flex-wrap: wrap; }
+  .menu-toggle { display: inline-block; width: auto; }
+  header .main-nav { display: none; }
+  header .main-nav.is-open { display: block; }
+  .header-menu-row .main-nav { width: 100%; margin-left: 0; }
+  .main-nav ul { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .main-nav a { text-align: left; padding: 10px 12px; background-color: #EAF3F1; }
+  body.dark .main-nav a { background-color: #30434A; }
+  body.dark .main-nav a.is-current { background-color: #245B51; }
+  .checklist-step .task-filter-button { flex: 1; }
 }
 
 
